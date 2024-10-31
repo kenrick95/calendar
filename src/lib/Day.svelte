@@ -45,7 +45,7 @@
     display: flex;
     align-items: start;
     justify-content: center;
-    height: 28px;
+    height: 26px;
     position: relative;
   }
   .date {
@@ -60,8 +60,8 @@
     color: var(--red);
   }
   .chinese {
-    font-size: 8px;
-    line-height: 12px;
+    font-size: 9px;
+    line-height: 10px;
     white-space: nowrap;
     position: absolute;
     bottom: 0;
