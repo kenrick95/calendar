@@ -48,11 +48,10 @@
     margin: 0;
   }
   .months {
-    /* TODO: define big grids and use subgrid at month, to make things aligned */
-    margin-top: 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-gap: 1.6rem;
+    grid-template-columns: [mc1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc4];
+    grid-template-rows: [mr1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr4] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr5];
+    gap: 2px;
+    margin-left: -1rem;
   }
 </style>

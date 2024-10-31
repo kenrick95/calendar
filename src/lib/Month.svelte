@@ -75,11 +75,12 @@
       )
     );
   }
+
+  let column = ((month - 1) % 3) + 1;
+  let row = Math.floor((month - 1) / 3) + 1;
 </script>
 
-<!-- TODO: dayofweek names -->
-
-<div class="month">
+<div class="month" style="--month-column: {column}; --month-row: {row}">
   <div class="monthName">
     {new Date(year, month - 1).toLocaleString('default', { month: 'long' })}
   </div>
@@ -106,10 +107,12 @@
 <style>
   .month {
     margin-top: 1rem;
+    margin-left: 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 2px;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    grid-column: calc((var(--month-column) - 1) * 7 + 1) / span 7;
+    grid-row: calc((var(--month-row) - 1) * 8 + 1) / span 8;
   }
   .monthName {
     grid-row: 1 / span 1;
@@ -119,5 +122,8 @@
   .placeholderDay {
     font-size: 1rem;
     aspect-ratio: 1;
+  }
+  .dayOfWeek {
+    font-size: 0.8rem;
   }
 </style>
