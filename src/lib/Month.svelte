@@ -37,18 +37,31 @@
 
   let dates: number[] = [];
 
-  let startOfWeekOffset: Record<StartOfWeek, number> = {
+  let startOfWeekOffsetMap: Record<StartOfWeek, number> = {
     [StartOfWeek.Saturday]:
       yearMonthDate.getDay() + 1 > 6 ? 0 : yearMonthDate.getDay() + 1,
     [StartOfWeek.Sunday]: yearMonthDate.getDay(),
     [StartOfWeek.Monday]:
       yearMonthDate.getDay() - 1 < 0 ? 6 : yearMonthDate.getDay() - 1,
   };
-  for (let i = 0; i < startOfWeekOffset[startOfWeek]; i++) {
+  let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
+  for (let i = 0; i < startOfWeekOffset; i++) {
     dates.push(0);
   }
   for (let i = 0; i < maxDateOfMonth; i++) {
     dates.push(i + 1);
+  }
+
+  let dayOfWeeks = [];
+  for (let i = 0; i < 7; i++) {
+    dayOfWeeks.push(
+      new Date(year, month - 1, 8 - startOfWeekOffset + i).toLocaleString(
+        'en-US',
+        {
+          weekday: 'short',
+        }
+      )
+    );
   }
 
   function isPublicHoliday(date: number, month: number, year: number): boolean {
@@ -65,7 +78,6 @@
 </script>
 
 <!-- TODO: dayofweek names -->
-<!-- TODO: moon phases -->
 
 <div class="month">
   <div class="monthName">
@@ -73,6 +85,9 @@
   </div>
 
   <!-- day of week names -->
+  {#each dayOfWeeks as dayOfWeek}
+    <div class="dayOfWeek">{dayOfWeek}</div>
+  {/each}
 
   {#each dates as date}
     {#if date > 0}
@@ -93,7 +108,7 @@
     margin-top: 1rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 2px;
   }
   .monthName {

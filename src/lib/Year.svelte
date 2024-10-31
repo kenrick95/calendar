@@ -48,6 +48,7 @@
     margin: 0;
   }
   .months {
+    /* TODO: define big grids and use subgrid at month, to make things aligned */
     margin-top: 1rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
