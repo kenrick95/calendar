@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      ical.js:
+        specifier: ^2.1.0
+        version: 2.1.0
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^4.0.0
@@ -362,6 +366,9 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
+  ical.js@2.1.0:
+    resolution: {integrity: sha512-BOVfrH55xQ6kpS3muGvIXIg2l7p+eoe12/oS7R5yrO3TL/j/bLsR0PR+tYQESFbyTbvGgPHn9zQ6tI4FWyuSaQ==}
+
   is-reference@3.0.2:
     resolution: {integrity: sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==}
 
@@ -620,7 +627,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.24.3':
     optional: true
 
-  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.0)(svelte@5.1.4)(vite@5.4.10)':
+  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.4)(vite@5.4.10))(svelte@5.1.4)(vite@5.4.10)':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 4.0.0(svelte@5.1.4)(vite@5.4.10)
       debug: 4.3.7
@@ -631,7 +638,7 @@ snapshots:
 
   '@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.4)(vite@5.4.10)':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.0)(svelte@5.1.4)(vite@5.4.10)
+      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.4)(vite@5.4.10))(svelte@5.1.4)(vite@5.4.10)
       debug: 4.3.7
       deepmerge: 4.3.1
       kleur: 4.1.5
@@ -703,6 +710,8 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
+
+  ical.js@2.1.0: {}
 
   is-reference@3.0.2:
     dependencies:
@@ -803,7 +812,7 @@ snapshots:
       fsevents: 2.3.3
 
   vitefu@1.0.3(vite@5.4.10):
-    dependencies:
+    optionalDependencies:
       vite: 5.4.10
 
   zimmerframe@1.1.2: {}

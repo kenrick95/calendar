@@ -1,7 +1,22 @@
 <script lang="ts">
   import Day from './Day.svelte';
+  import { StartOfWeek } from './startOfWeek';
 
-  let { month, year }: { year: number; month: number } = $props();
+  let {
+    month,
+    year,
+    startOfWeek,
+    publicHolidays,
+  }: {
+    year: number;
+    month: number;
+    startOfWeek: StartOfWeek;
+    publicHolidays: {
+      name: string;
+      startDate: Date;
+      endDate: Date;
+    }[];
+  } = $props();
 
   function pad(number: number): string {
     return number < 10 ? `0${String(number)}` : String(number);
@@ -21,22 +36,55 @@
   let maxDateOfMonth = getMaxDateOfMonth(yearMonthDate);
 
   let dates: number[] = [];
-  for (let i = 0; i < yearMonthDate.getDay(); i++) {
+
+  let startOfWeekOffset: Record<StartOfWeek, number> = {
+    [StartOfWeek.Saturday]:
+      yearMonthDate.getDay() + 1 > 6 ? 0 : yearMonthDate.getDay() + 1,
+    [StartOfWeek.Sunday]: yearMonthDate.getDay(),
+    [StartOfWeek.Monday]:
+      yearMonthDate.getDay() - 1 < 0 ? 6 : yearMonthDate.getDay() - 1,
+  };
+  for (let i = 0; i < startOfWeekOffset[startOfWeek]; i++) {
     dates.push(0);
   }
   for (let i = 0; i < maxDateOfMonth; i++) {
     dates.push(i + 1);
   }
+
+  function isPublicHoliday(date: number, month: number, year: number): boolean {
+    return (
+      publicHolidays.length > 0 &&
+      publicHolidays.some(
+        (publicHoliday) =>
+          publicHoliday.startDate.getDate() === date &&
+          publicHoliday.startDate.getMonth() === month - 1 &&
+          publicHoliday.startDate.getFullYear() === year
+      )
+    );
+  }
 </script>
 
-<!-- TODO: month name -->
 <!-- TODO: dayofweek names -->
 <!-- TODO: moon phases -->
-<div class="dates">
+
+<div class="month">
+  <div class="monthName">
+    {new Date(year, month - 1).toLocaleString('default', { month: 'long' })}
+  </div>
+
+
+  <!-- day of week names -->
+  
+
   {#each dates as date}
     <div class="date">
       {#if date > 0}
-        <Day day={date} {month} {year} />
+        <Day
+          day={date}
+          {month}
+          {year}
+          isPublicHoliday={isPublicHoliday(date, month, year)}
+        />
       {:else}
         &nbsp;
       {/if}
@@ -45,11 +93,16 @@
 </div>
 
 <style>
-  .dates {
+  .month {
     margin-top: 1rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 2px;
+  }
+  .monthName {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 7;
+    font-size: 1.2em;
   }
 </style>
