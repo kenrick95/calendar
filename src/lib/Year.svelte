@@ -31,11 +31,7 @@
   }
 </script>
 
-<h2>
-  <div class="prev"></div>
-  {year}
-  <div class="next"></div>
-</h2>
+<h2 class="year">{year}</h2>
 <div class="months">
   {#each months as month}
     <Month
@@ -48,8 +44,11 @@
 </div>
 
 <style>
+  .year {
+    margin: 0;
+  }
   .months {
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;

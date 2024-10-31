@@ -72,23 +72,19 @@
     {new Date(year, month - 1).toLocaleString('default', { month: 'long' })}
   </div>
 
-
   <!-- day of week names -->
-  
 
   {#each dates as date}
-    <div class="date">
-      {#if date > 0}
-        <Day
-          day={date}
-          {month}
-          {year}
-          isPublicHoliday={isPublicHoliday(date, month, year)}
-        />
-      {:else}
-        &nbsp;
-      {/if}
-    </div>
+    {#if date > 0}
+      <Day
+        day={date}
+        {month}
+        {year}
+        isPublicHoliday={isPublicHoliday(date, month, year)}
+      />
+    {:else}
+      <div class="placeholderDay"></div>
+    {/if}
   {/each}
 </div>
 
@@ -104,5 +100,9 @@
     grid-row: 1 / span 1;
     grid-column: 1 / span 7;
     font-size: 1.2em;
+  }
+  .placeholderDay {
+    font-size: 1rem;
+    aspect-ratio: 1;
   }
 </style>
