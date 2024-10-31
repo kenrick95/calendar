@@ -46,11 +46,13 @@
 <style>
   .year {
     margin: 0;
+    font-size: 24px;
+    line-height: 24px;
   }
   .months {
     display: grid;
     grid-template-columns: [mc1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc4];
     gap: 2px;
-    margin-left: -2rem;
+    margin-left: -20px;
   }
 </style>

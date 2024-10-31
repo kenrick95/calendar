@@ -20,6 +20,7 @@
   },
   "packageManager": "pnpm@9.12.3",
   "dependencies": {
-    "ical.js": "^2.1.0"
+    "ical.js": "^2.1.0",
+    "lunar-javascript": "^1.6.12"
   }
 }

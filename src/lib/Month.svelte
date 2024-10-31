@@ -1,6 +1,7 @@
 <script lang="ts">
   import Day from './Day.svelte';
   import { StartOfWeek } from './startOfWeek';
+  import { Solar } from 'lunar-javascript';
 
   let {
     month,
@@ -35,7 +36,19 @@
   let yearMonthDate = new Date(yearMonth);
   let maxDateOfMonth = getMaxDateOfMonth(yearMonthDate);
 
-  let dates: number[] = [];
+  let dates: Array<null | {
+    year: number;
+    month: number;
+    day: number;
+    chineseYear: number;
+    chineseMonth: number;
+    chineseDay: number;
+    chineseYearString: string;
+    chineseMonthString: string;
+    chineseDayString: string;
+    isPublicHoliday: boolean;
+    isWeekend: boolean;
+  }> = [];
 
   let startOfWeekOffsetMap: Record<StartOfWeek, number> = {
     [StartOfWeek.Saturday]:
@@ -46,10 +59,24 @@
   };
   let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
   for (let i = 0; i < startOfWeekOffset; i++) {
-    dates.push(0);
+    dates.push(null);
   }
   for (let i = 0; i < maxDateOfMonth; i++) {
-    dates.push(i + 1);
+    let solar = Solar.fromYmd(year, month, i + 1);
+    let lunar = solar.getLunar();
+    dates.push({
+      year,
+      month,
+      day: i + 1,
+      chineseYear: lunar.getYear(),
+      chineseMonth: lunar.getMonth(),
+      chineseDay: lunar.getDay(),
+      chineseYearString: lunar.getYearInChinese(),
+      chineseMonthString: lunar.getMonthInChinese(),
+      chineseDayString: lunar.getDayInChinese(),
+      isPublicHoliday: isPublicHoliday(year, month, i + 1),
+      isWeekend: [0, 6].includes(new Date(year, month - 1, i + 1).getDay()),
+    });
   }
 
   let dayOfWeeks = [];
@@ -64,12 +91,12 @@
     );
   }
 
-  function isPublicHoliday(date: number, month: number, year: number): boolean {
+  function isPublicHoliday(year: number, month: number, day: number): boolean {
     return (
       publicHolidays.length > 0 &&
       publicHolidays.some(
         (publicHoliday) =>
-          publicHoliday.startDate.getDate() === date &&
+          publicHoliday.startDate.getDate() === day &&
           publicHoliday.startDate.getMonth() === month - 1 &&
           publicHoliday.startDate.getFullYear() === year
       )
@@ -91,12 +118,19 @@
   {/each}
 
   {#each dates as date}
-    {#if date > 0}
+    {#if date !== null}
       <Day
-        day={date}
-        {month}
-        {year}
-        isPublicHoliday={isPublicHoliday(date, month, year)}
+        day={date.day}
+        month={date.month}
+        year={date.year}
+        chineseYear={date.chineseYear}
+        chineseMonth={date.chineseMonth}
+        chineseDay={date.chineseDay}
+        chineseYearString={date.chineseYearString}
+        chineseMonthString={date.chineseMonthString}
+        chineseDayString={date.chineseDayString}
+        isPublicHoliday={date.isPublicHoliday}
+        isWeekend={date.isWeekend}
       />
     {:else}
       <div class="placeholderDay"></div>
@@ -106,8 +140,8 @@
 
 <style>
   .month {
-    margin-top: 1rem;
-    margin-left: 2rem;
+    margin-top: 5px;
+    margin-left: 20px;
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
@@ -117,12 +151,9 @@
   .monthName {
     grid-row: 1 / span 1;
     grid-column: 1 / span 7;
-    font-size: 1.2em;
-  }
-  .placeholderDay {
-    font-size: 1rem;
+    font-size: 16px;
   }
   .dayOfWeek {
-    font-size: 0.8rem;
+    font-size: 10px;
   }
 </style>

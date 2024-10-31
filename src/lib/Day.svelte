@@ -3,36 +3,70 @@
     year,
     month,
     day,
+    chineseDay,
+    chineseMonthString,
+    chineseDayString,
     isPublicHoliday,
-  }: { year: number; month: number; day: number; isPublicHoliday: boolean } =
-    $props();
-
-  let isWeekend =
-    new Date(year, month - 1, day).getDay() === 0 ||
-    new Date(year, month - 1, day).getDay() === 6;
+    isWeekend,
+  }: {
+    year: number;
+    month: number;
+    day: number;
+    chineseYear: number;
+    chineseMonth: number;
+    chineseDay: number;
+    chineseYearString: string;
+    chineseMonthString: string;
+    chineseDayString: string;
+    isPublicHoliday: boolean;
+    isWeekend: boolean;
+  } = $props();
 </script>
 
-<div
-  class="day {isPublicHoliday ? 'publicHoliday' : ''} {isWeekend
-    ? 'weekend'
-    : ''}"
->
-  {day}
+<div class="day">
+  <div
+    class="date {isPublicHoliday ? 'publicHoliday' : ''} {isWeekend
+      ? 'weekend'
+      : ''}"
+  >
+    {day}
+  </div>
+  <div class="chinese">
+    {#if chineseDay === 1}
+      {chineseMonthString}月
+    {:else if chineseDay === 15}
+      {chineseDayString}
+    {/if}
+  </div>
 </div>
 
 <style>
   .day {
-    text-align: center;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    border-radius: 50%;
-    font-size: 1rem;
+    height: 28px;
+    position: relative;
+  }
+  .date {
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
   }
   .publicHoliday {
     color: var(--red);
   }
   .weekend {
     color: var(--red);
+  }
+  .chinese {
+    font-size: 8px;
+    line-height: 12px;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
   }
 </style>
