@@ -50,8 +50,7 @@
   .months {
     display: grid;
     grid-template-columns: [mc1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc4];
-    grid-template-rows: [mr1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr4] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mr5];
     gap: 2px;
-    margin-left: -1rem;
+    margin-left: -2rem;
   }
 </style>

@@ -107,7 +107,7 @@
 <style>
   .month {
     margin-top: 1rem;
-    margin-left: 1rem;
+    margin-left: 2rem;
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
@@ -121,7 +121,6 @@
   }
   .placeholderDay {
     font-size: 1rem;
-    aspect-ratio: 1;
   }
   .dayOfWeek {
     font-size: 0.8rem;
