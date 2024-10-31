@@ -15,14 +15,17 @@ export async function getPublicHolidays(year: number): Promise<
     const jCalData = ICAL.parse(text);
     const comp = new ICAL.Component(jCalData);
 
-    const events = comp.getAllSubcomponents('vevent').map((vevent) => {
-      const event = new ICAL.Event(vevent);
-      return {
-        name: event.summary,
-        startDate: event.startDate.toJSDate(),
-        endDate: event.endDate.toJSDate(),
-      };
-    });
+    const events = comp
+      .getAllSubcomponents('vevent')
+      .map((vevent) => {
+        const event = new ICAL.Event(vevent);
+        return {
+          name: event.summary,
+          startDate: event.startDate.toJSDate(),
+          endDate: event.endDate.toJSDate(),
+        };
+      })
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     return events;
   } catch (e) {

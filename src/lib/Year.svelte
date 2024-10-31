@@ -42,6 +42,22 @@
     />
   {/each}
 </div>
+<div class="ph">
+  <h3 class="phHeader">Public Holidays</h3>
+  <ul class="list">
+    {#each publicHolidays as publicHoliday}
+      <li class="listItem">
+        <div class="listDate">
+          {publicHoliday.startDate.toLocaleString('en-SG', {
+            month: 'short',
+            day: 'numeric',
+          })}
+        </div>
+        <div class="listName">{publicHoliday.name}</div>
+      </li>
+    {/each}
+  </ul>
+</div>
 
 <style>
   .year {
@@ -54,5 +70,33 @@
     grid-template-columns: [mc1] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc2] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc3] 1fr 1fr 1fr 1fr 1fr 1fr 1fr [mc4];
     gap: 2px;
     margin-left: -20px;
+  }
+  .ph {
+    margin-top: 10px;
+  }
+  .phHeader {
+    font-size: 16px;
+    line-height: 18px;
+    margin: 0;
+  }
+  .list {
+    list-style-type: none;
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    column-count: 3;
+    column-gap: 20px;
+    text-align: start;
+    font-size: 14px;
+  }
+  .listItem {
+    display: flex;
+  }
+  .listDate {
+    flex: 0 1 70px;
+    color: var(--red);
+  }
+  .listName {
+    flex: 1 1 auto;
   }
 </style>
