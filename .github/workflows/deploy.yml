@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy-gh-pages:
+    concurrency:
+      group: ci-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: ubuntu-20.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.0.0
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Checks
+        run: pnpm check
+      - name: Build
+        run: pnpm build-gh-pages
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        with:
+          branch: gh-pages
+          folder: dist
