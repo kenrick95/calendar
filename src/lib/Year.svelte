@@ -10,18 +10,24 @@
     country,
   }: { year: number; startOfWeek: StartOfWeek; country: Country } = $props();
 
-  let months: number[] = [];
-  for (let i = 0; i < 12; i++) {
-    months.push(i + 1);
-  }
+  let months: number[] = $derived.by(() => {
+    let months: number[] = [];
+    for (let i = 0; i < 12; i++) {
+      months.push(i + 1);
+    }
+    return months;
+  });
 
   let publicHolidays: {
     name: string;
     startDate: Date;
     endDate: Date;
   }[] = $state([]);
-  onMount(async () => {
-    publicHolidays = await getPublicHolidays(country, year);
+  $effect(() => {
+    // https://github.com/sveltejs/svelte/issues/9520#issuecomment-2185526192
+    void (async () => {
+      publicHolidays = await getPublicHolidays(country, year);
+    })();
   });
 
   function monthFilter(month: number) {

@@ -14,7 +14,9 @@
 
   --red: #e5484d;
 }
-
+* {
+  box-sizing: border-box;
+}
 a {
   font-weight: 500;
   color: #4CCCE6;

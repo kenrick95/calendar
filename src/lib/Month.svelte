@@ -32,30 +32,35 @@
     return lastMonthDate.getDate();
   }
 
-  let yearMonth = `${year}-${pad(month)}`;
-  let yearMonthDate = new Date(yearMonth);
-  let maxDateOfMonth = getMaxDateOfMonth(yearMonthDate);
+  let [startOfWeekOffset, dayOfWeeks] = $derived.by<
+    readonly [number, string[]]
+  >(() => {
+    let yearMonth = `${year}-${pad(month)}`;
+    let yearMonthDate = new Date(yearMonth);
 
-  let startOfWeekOffsetMap: Record<StartOfWeek, number> = {
-    [StartOfWeek.Saturday]:
-      yearMonthDate.getDay() + 1 > 6 ? 0 : yearMonthDate.getDay() + 1,
-    [StartOfWeek.Sunday]: yearMonthDate.getDay(),
-    [StartOfWeek.Monday]:
-      yearMonthDate.getDay() - 1 < 0 ? 6 : yearMonthDate.getDay() - 1,
-  };
+    let startOfWeekOffsetMap: Record<StartOfWeek, number> = {
+      [StartOfWeek.Saturday]:
+        yearMonthDate.getDay() + 1 > 6 ? 0 : yearMonthDate.getDay() + 1,
+      [StartOfWeek.Sunday]: yearMonthDate.getDay(),
+      [StartOfWeek.Monday]:
+        yearMonthDate.getDay() - 1 < 0 ? 6 : yearMonthDate.getDay() - 1,
+    };
+    let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
+    let dayOfWeeks: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      dayOfWeeks.push(
+        new Date(year, month - 1, 8 - startOfWeekOffset + i).toLocaleString(
+          'en-US',
+          {
+            weekday: 'short',
+          }
+        )
+      );
+    }
 
-  let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
-  let dayOfWeeks = [];
-  for (let i = 0; i < 7; i++) {
-    dayOfWeeks.push(
-      new Date(year, month - 1, 8 - startOfWeekOffset + i).toLocaleString(
-        'en-US',
-        {
-          weekday: 'short',
-        }
-      )
-    );
-  }
+    return [startOfWeekOffset, dayOfWeeks];
+  });
+  
 
   let dates: Array<null | {
     year: number;
@@ -86,6 +91,9 @@
     for (let i = 0; i < startOfWeekOffset; i++) {
       res.push(null);
     }
+    let yearMonth = `${year}-${pad(month)}`;
+    let yearMonthDate = new Date(yearMonth);
+    let maxDateOfMonth = getMaxDateOfMonth(yearMonthDate);
     for (let i = 0; i < maxDateOfMonth; i++) {
       let solar = Solar.fromYmd(year, month, i + 1);
       let lunar = solar.getLunar();
