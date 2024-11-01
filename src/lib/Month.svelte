@@ -36,20 +36,6 @@
   let yearMonthDate = new Date(yearMonth);
   let maxDateOfMonth = getMaxDateOfMonth(yearMonthDate);
 
-  let dates: Array<null | {
-    year: number;
-    month: number;
-    day: number;
-    chineseYear: number;
-    chineseMonth: number;
-    chineseDay: number;
-    chineseYearString: string;
-    chineseMonthString: string;
-    chineseDayString: string;
-    isPublicHoliday: boolean;
-    isWeekend: boolean;
-  }> = [];
-
   let startOfWeekOffsetMap: Record<StartOfWeek, number> = {
     [StartOfWeek.Saturday]:
       yearMonthDate.getDay() + 1 > 6 ? 0 : yearMonthDate.getDay() + 1,
@@ -57,28 +43,8 @@
     [StartOfWeek.Monday]:
       yearMonthDate.getDay() - 1 < 0 ? 6 : yearMonthDate.getDay() - 1,
   };
-  let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
-  for (let i = 0; i < startOfWeekOffset; i++) {
-    dates.push(null);
-  }
-  for (let i = 0; i < maxDateOfMonth; i++) {
-    let solar = Solar.fromYmd(year, month, i + 1);
-    let lunar = solar.getLunar();
-    dates.push({
-      year,
-      month,
-      day: i + 1,
-      chineseYear: lunar.getYear(),
-      chineseMonth: lunar.getMonth(),
-      chineseDay: lunar.getDay(),
-      chineseYearString: lunar.getYearInChinese(),
-      chineseMonthString: lunar.getMonthInChinese(),
-      chineseDayString: lunar.getDayInChinese(),
-      isPublicHoliday: isPublicHoliday(year, month, i + 1),
-      isWeekend: [0, 6].includes(new Date(year, month - 1, i + 1).getDay()),
-    });
-  }
 
+  let startOfWeekOffset = startOfWeekOffsetMap[startOfWeek];
   let dayOfWeeks = [];
   for (let i = 0; i < 7; i++) {
     dayOfWeeks.push(
@@ -91,6 +57,56 @@
     );
   }
 
+  let dates: Array<null | {
+    year: number;
+    month: number;
+    day: number;
+    chineseYear: number;
+    chineseMonth: number;
+    chineseDay: number;
+    chineseYearString: string;
+    chineseMonthString: string;
+    chineseDayString: string;
+    isPublicHoliday: boolean;
+    isWeekend: boolean;
+  }> = $derived.by(() => {
+    let res: Array<null | {
+      year: number;
+      month: number;
+      day: number;
+      chineseYear: number;
+      chineseMonth: number;
+      chineseDay: number;
+      chineseYearString: string;
+      chineseMonthString: string;
+      chineseDayString: string;
+      isPublicHoliday: boolean;
+      isWeekend: boolean;
+    }> = [];
+    for (let i = 0; i < startOfWeekOffset; i++) {
+      res.push(null);
+    }
+    for (let i = 0; i < maxDateOfMonth; i++) {
+      let solar = Solar.fromYmd(year, month, i + 1);
+      let lunar = solar.getLunar();
+      res.push({
+        year,
+        month,
+        day: i + 1,
+        chineseYear: lunar.getYear(),
+        chineseMonth: lunar.getMonth(),
+        chineseDay: lunar.getDay(),
+        chineseYearString: lunar.getYearInChinese(),
+        chineseMonthString: lunar.getMonthInChinese(),
+        chineseDayString: lunar.getDayInChinese(),
+        isPublicHoliday: isPublicHoliday(year, month, i + 1),
+        isWeekend: [0, 6].includes(new Date(year, month - 1, i + 1).getDay()),
+      });
+    }
+
+    return res;
+  });
+
   function isPublicHoliday(year: number, month: number, day: number): boolean {
     return (
       publicHolidays.length > 0 &&
@@ -102,7 +118,6 @@
       )
     );
   }
-
   let column = ((month - 1) % 3) + 1;
   let row = Math.floor((month - 1) / 3) + 1;
 </script>

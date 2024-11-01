@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Month from './Month.svelte';
-  import { getPublicHolidays } from './publicHolidays/sg';
   import type { StartOfWeek } from './startOfWeek';
-  let { year, startOfWeek }: { year: number; startOfWeek: StartOfWeek } =
-    $props();
+  import { Country } from './country';
+  import { getPublicHolidays } from './publicHolidays';
+  let {
+    year,
+    startOfWeek,
+    country,
+  }: { year: number; startOfWeek: StartOfWeek; country: Country } = $props();
 
   let months: number[] = [];
   for (let i = 0; i < 12; i++) {
@@ -17,7 +21,7 @@
     endDate: Date;
   }[] = $state([]);
   onMount(async () => {
-    publicHolidays = await getPublicHolidays(year);
+    publicHolidays = await getPublicHolidays(country, year);
   });
 
   function monthFilter(month: number) {
