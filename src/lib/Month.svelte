@@ -60,7 +60,6 @@
 
     return [startOfWeekOffset, dayOfWeeks];
   });
-  
 
   let dates: Array<null | {
     year: number;
@@ -163,7 +162,6 @@
 
 <style>
   .month {
-    margin-top: 5px;
     margin-left: 20px;
     display: grid;
     grid-template-columns: subgrid;

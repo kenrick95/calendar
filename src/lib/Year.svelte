@@ -97,16 +97,16 @@
     column-count: 3;
     column-gap: 20px;
     text-align: start;
-    font-size: 14px;
+    font-size: 12px;
   }
   .listItem {
     display: flex;
   }
   .listDate {
-    flex: 0 1 70px;
+    flex: 0 0 45px;
     color: var(--red);
   }
   .listName {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
   }
 </style>
