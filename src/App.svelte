@@ -6,7 +6,7 @@
 
   let controls = $state(ControlState.Collapsed);
   let country = $state(Country.Singapore);
-  let year = $state(2026);
+  let year = $state(2027);
   let startOfWeek = $state(StartOfWeek.Monday);
 </script>
 
