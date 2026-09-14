@@ -1,13 +1,72 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { ControlState } from './lib/ControlState';
   import { Country } from './lib/country';
   import { StartOfWeek } from './lib/startOfWeek';
   import Year from './lib/Year.svelte';
 
+  const defaultPreferences = {
+    country: Country.Singapore,
+    year: 2027,
+    startOfWeek: StartOfWeek.Monday,
+  };
+
+  function isCountry(value: string | null): value is Country {
+    return Object.values(Country).includes(value as Country);
+  }
+
+  function isStartOfWeek(value: string | null): value is StartOfWeek {
+    return Object.values(StartOfWeek).includes(value as StartOfWeek);
+  }
+
+  function preferencesFromSearch(search: string) {
+    const query = new URLSearchParams(search);
+    const country = query.get('country');
+    const year = Number(query.get('year'));
+    const startOfWeek = query.get('startOfWeek');
+    return {
+      country: isCountry(country) ? country : defaultPreferences.country,
+      year: Number.isSafeInteger(year) && year >= 1 && year <= 9999
+        ? year
+        : defaultPreferences.year,
+      startOfWeek: isStartOfWeek(startOfWeek)
+        ? startOfWeek
+        : defaultPreferences.startOfWeek,
+    };
+  }
+
+  const initialPreferences = preferencesFromSearch(
+    typeof window === 'undefined' ? '' : window.location.search
+  );
+
   let controls = $state(ControlState.Collapsed);
-  let country = $state(Country.Singapore);
-  let year = $state(2027);
-  let startOfWeek = $state(StartOfWeek.Monday);
+  let country = $state(initialPreferences.country);
+  let year = $state(initialPreferences.year);
+  let startOfWeek = $state(initialPreferences.startOfWeek);
+
+  $effect(() => {
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('country', country);
+    url.searchParams.set('year', String(year));
+    url.searchParams.set('startOfWeek', startOfWeek);
+    if (url.href !== window.location.href) {
+      window.history.replaceState(window.history.state, '', url);
+    }
+  });
+
+  onMount(() => {
+    const handlePopState = () => {
+      const preferences = preferencesFromSearch(window.location.search);
+      country = preferences.country;
+      year = preferences.year;
+      startOfWeek = preferences.startOfWeek;
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  });
 </script>
 
 <aside class="controls">
